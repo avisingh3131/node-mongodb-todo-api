@@ -47,8 +47,7 @@ User.findById('5b7c127a80fe001c094c3337').then((user)=>{
 },(e)=>{
     console.log(e);
     
-}
-);
+});
 
 
 
