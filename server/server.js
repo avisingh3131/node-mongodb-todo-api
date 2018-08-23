@@ -10,11 +10,13 @@ var{User}=require('./models/user');
 
 var app=express();
 
-app.use(bodyParser.json());
+
+app.use(bodyParser.json());// support parsing of application/json type post data
 
 app.post('/todos',(req,res)=>{
     var todo=new  Todo({
-        text:req.body.text
+        text:req.body.text,
+        completed:req.body.completed
     })
 
     todo.save().then((doc)=>{
@@ -100,6 +102,24 @@ app.delete('/todos/:id',(req,res)=>{
                    
                });
         
+        });
+
+
+
+
+        app.post('/users',(req,res)=>{
+            var body=_.pick(req.body,['email','password']);
+            var user=new User(body);
+
+        
+            user.save().then(()=>{
+                return user.generateAuthToken(); 
+            }).then((token)=>{
+                   res.header('x-auth',token).send(user); 
+            }).catch((e)=>{
+                res.status(400).send(e);
+            })
+            
         });
 
 app.listen(3000,()=>{
